@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -41,11 +43,34 @@ class _HomePageState extends State<HomePage> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: (CatalogModel.items != null && CatalogModel.items.isNotEmpty)
-            ? ListView.builder(
+            ? GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 16,
+                    mainAxisSpacing: 16),
                 itemCount: CatalogModel.items.length,
-                itemBuilder: (context, index) => ItemWidget(
-                  item: CatalogModel.items[index],
-                ),
+                itemBuilder: (context, index) {
+                  final item = CatalogModel.items[index];
+                  return Card(
+                      clipBehavior: Clip.antiAlias,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                      child: GridTile(
+                        header: Container(
+                            padding: EdgeInsets.all(12),
+                            decoration: BoxDecoration(color: Colors.deepPurple),
+                            child: Text(
+                              item.name,
+                              style: TextStyle(color: Colors.white),
+                            )),
+                        footer: Center(
+                            child: Text(
+                          "\$${item.price}",
+                          style: TextStyle(fontSize: 16),
+                        )),
+                        child: Image.network(item.image),
+                      ));
+                },
               )
             : Center(
                 child: CircularProgressIndicator(),
