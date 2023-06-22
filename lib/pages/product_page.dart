@@ -10,6 +10,11 @@ class ProductDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String dummyText =
+        "Sit kasd ut dolores et voluptua eirmod gubergren, duo sit clita dolore amet et, justo sea lorem dolor clita aliquyam gubergren dolore diam diam, eos no amet no invidunt kasd no amet. Sit elitr labore erat aliquyam, gubergren erat aliquyam sit eirmod. Et et sit stet sit tempor tempor, rebum.";
+    String dummyText2 =
+        "Sit elitr labore erat aliquyam, gubergren erat aliquyam sit eirmod. Et et sit stet sit tempor tempor, rebum.";
+
     return Scaffold(
       appBar: AppBar(),
       backgroundColor: MyTheme.creamColor,
@@ -24,8 +29,8 @@ class ProductDetails extends StatelessWidget {
                       shape: MaterialStateProperty.all(
                     StadiumBorder(),
                   )),
-                  child: "Buy".text.xl.make())
-              .wh(100, 50)
+                  child: "Add to Cart".text.xl.make())
+              .wh(150, 50)
         ],
       ).p32().color(Colors.white),
       body: SafeArea(
@@ -56,6 +61,16 @@ class ProductDetails extends StatelessWidget {
                           .xl
                           .make(),
                       10.heightBox,
+                      dummyText.text
+                          .textStyle(context.captionStyle)
+                          .color(MyTheme.darkblusihColor)
+                          .make()
+                          .p16(),
+                      dummyText2.text
+                          .textStyle(context.captionStyle)
+                          .color(MyTheme.darkblusihColor)
+                          .make()
+                          .p16(),
                     ],
                   ).py64(),
                 ),

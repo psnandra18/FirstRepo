@@ -1,10 +1,12 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application_1/models/catalog.dart';
 import 'package:flutter_application_1/pages/product_page.dart';
+import 'package:flutter_application_1/utils/routes.dart';
 import 'package:flutter_application_1/utils/themes.dart';
 import 'package:flutter_application_1/widgets/drawer.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -40,19 +42,27 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: context.canvasColor,
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.pushNamed(context, MyRoutes.cartPage);
+          },
+          child: Icon(CupertinoIcons.cart),
+        ),  
         body: SafeArea(
-      bottom: false,
-      child: Container(
-        padding: Vx.m32,
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          CatalogHeader(),
-          if (CatalogModel.items != null && CatalogModel.items.isNotEmpty)
-            CatalogList().py16().expand()
-          else
-            CircularProgressIndicator().centered().expand(),
-        ]),
-      ),
-    ));
+          //bottom: false,
+          child: Container(
+            padding: Vx.m32,
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              CatalogHeader(),
+              if (CatalogModel.items != null && CatalogModel.items.isNotEmpty)
+                CatalogList().py16().expand()
+              else
+                CircularProgressIndicator().centered().expand(),
+            ]),
+          ),
+        ));
   }
 }
 
@@ -117,7 +127,7 @@ class CatalogItem extends StatelessWidget {
                 .textStyle(context.captionStyle)
                 .color(MyTheme.darkblusihColor)
                 .make(),
-            10.heightBox,
+            20.heightBox,
             ButtonBar(
               alignment: MainAxisAlignment.spaceBetween,
               buttonPadding: EdgeInsets.zero,
@@ -127,7 +137,7 @@ class CatalogItem extends StatelessWidget {
                     onPressed: () {},
                     style: ButtonStyle(
                         shape: MaterialStateProperty.all(StadiumBorder())),
-                    child: "Buy".text.make())
+                    child: Icon(CupertinoIcons.cart_badge_plus))
               ],
             ).pOnly(right: 8)
           ],
