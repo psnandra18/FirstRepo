@@ -4,6 +4,8 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_application_1/core/store.dart';
+import 'package:flutter_application_1/models/cart.dart';
 import 'package:flutter_application_1/models/catalog.dart';
 import 'package:flutter_application_1/pages/product_page.dart';
 import 'package:flutter_application_1/utils/routes.dart';
@@ -41,14 +43,23 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final _cart = (VxState.store as MyStore).cart;
     return Scaffold(
         backgroundColor: context.canvasColor,
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.pushNamed(context, MyRoutes.cartPage);
-          },
-          child: Icon(CupertinoIcons.cart),
-        ),  
+        floatingActionButton: VxBuilder(
+          mutations: {AddMutation, RemoveMutation},
+          builder: (context, _, __) => FloatingActionButton(
+            onPressed: () {
+              Navigator.pushNamed(context, MyRoutes.cartPage);
+            },
+            child: Icon(CupertinoIcons.cart),
+          ).badge(
+              color: Vx.red500,
+              size: 22,
+              count: _cart.items.length,
+              textStyle:
+                  TextStyle(fontWeight: FontWeight.bold, color: Vx.black)),
+        ),
         body: SafeArea(
           //bottom: false,
           child: Container(
@@ -133,17 +144,46 @@ class CatalogItem extends StatelessWidget {
               buttonPadding: EdgeInsets.zero,
               children: [
                 "\$${Catalog.price}".text.bold.xl.make(),
-                ElevatedButton(
-                    onPressed: () {},
-                    style: ButtonStyle(
-                        shape: MaterialStateProperty.all(StadiumBorder())),
-                    child: Icon(CupertinoIcons.cart_badge_plus))
+                AddToCart(
+                  catalog: Catalog,
+                )
               ],
             ).pOnly(right: 8)
           ],
         ))
       ],
     )).white.rounded.square(150).make().py16();
+  }
+}
+
+class AddToCart extends StatelessWidget {
+  final Item catalog;
+  AddToCart({
+    super.key,
+    required this.catalog,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return VxConsumer(
+      mutations: {AddMutation, RemoveMutation},
+      builder: (context, _, __) {
+        final CartModel _cart = (VxState.store as MyStore).cart;
+        bool isInCart = _cart.items.contains(catalog) ?? false;
+
+        return ElevatedButton(
+          onPressed: () {
+            if (!isInCart) {
+              AddMutation(catalog);
+            }
+          },
+          style: ButtonStyle(shape: MaterialStateProperty.all(StadiumBorder())),
+          child: isInCart
+              ? Icon(CupertinoIcons.checkmark_alt)
+              : Icon(CupertinoIcons.cart_badge_plus),
+        );
+      },
+    );
   }
 }
 
