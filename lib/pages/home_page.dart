@@ -94,24 +94,45 @@ class CatalogList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      shrinkWrap: true,
-      itemCount: CatalogModel.items.length,
-      itemBuilder: (context, index) {
-        final catalog = CatalogModel.items[index];
-        return InkWell(
-          onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ProductDetails(catalog: catalog),
-            ),
-          ),
-          child: CatalogItem(
-            Catalog: catalog,
-          ),
-        );
-      },
-    );
+    return !context.isMobile
+        ? GridView.builder(
+            gridDelegate:
+                SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2 ),
+            shrinkWrap: true,
+            itemCount: CatalogModel.items.length,
+            itemBuilder: (context, index) {
+              final catalog = CatalogModel.items[index];
+              return InkWell(
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ProductDetails(catalog: catalog),
+                  ),
+                ),
+                child: CatalogItem(
+                  Catalog: catalog,
+                ),
+              );
+            },
+          )
+        : ListView.builder(
+            shrinkWrap: true,
+            itemCount: CatalogModel.items.length,
+            itemBuilder: (context, index) {
+              final catalog = CatalogModel.items[index];
+              return InkWell(
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ProductDetails(catalog: catalog),
+                  ),
+                ),
+                child: CatalogItem(
+                  Catalog: catalog,
+                ),
+              );
+            },
+          );
   }
 }
 
@@ -204,51 +225,3 @@ class CatalogImages extends StatelessWidget {
         .w40(context);
   }
 }
-
-
-
-
-
-
-
-      // appBar: AppBar(
-      //   title: Text("Catalog App"),
-      // ),
-      // body: Padding(
-      //   padding: const EdgeInsets.all(16.0),
-      //   child: (CatalogModel.items != null && CatalogModel.items.isNotEmpty)
-      //       ? GridView.builder(
-      //           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-      //               crossAxisCount: 2,
-      //               crossAxisSpacing: 16,
-      //               mainAxisSpacing: 16),
-      //           itemCount: CatalogModel.items.length,
-      //           itemBuilder: (context, index) {
-      //             final item = CatalogModel.items[index];
-      //             return Card(
-      //                 clipBehavior: Clip.antiAlias,
-      //                 shape: RoundedRectangleBorder(
-      //                     borderRadius: BorderRadius.circular(10)),
-      //                 child: GridTile(
-      //                   header: Container(
-      //                       padding: EdgeInsets.all(12),
-      //                       decoration: BoxDecoration(color: Colors.deepPurple),
-      //                       child: Text(
-      //                         item.name,
-      //                         style: TextStyle(color: Colors.white),
-      //                       )),
-      //                   footer: Center(
-      //                       child: Text(
-      //                     "\$${item.price}",
-      //                     style: TextStyle(fontSize: 16),
-      //                   )),
-      //                   child: Image.network(item.image),
-      //                 ));
-      //           },
-      //         )
-      //       : Center(
-      //           child: CircularProgressIndicator(),
-      //         ),
-      // ),
-      // drawer: MyDrawer(),
- 
